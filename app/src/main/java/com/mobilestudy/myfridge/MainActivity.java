@@ -55,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 View view = super.getView(position, convertView, parent);
 
                 Product product = getItem(position);
-
-
-                textView.setTextColor(Color.WHITE);
+                ((TextView) view).setTextColor(Color.WHITE);
                 if (product != null && isCurrentDateGreaterThanEndDate(product.getDate().getEndExpirationDate())) {
                     view.setBackgroundColor(Color.RED);
                 } else {
@@ -130,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         dialogList.add("Fish");
         dialogList.add("Chicken");
         dialogList.add("Beaf");
+        dialogList.add("Your own product");
 
         ArrayAdapter<String> dialogListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dialogList);
         dialogListView.setAdapter(dialogListAdapter);
@@ -138,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 dialog.dismiss();
-
                 String selectedItem = dialogList.get(position);
                 showDateInputDialog(selectedItem);
             }
@@ -159,16 +157,20 @@ public class MainActivity extends AppCompatActivity {
 
         EditText startDateInput = dateInputDialog.findViewById(R.id.startDateInput);
         EditText endDateInput = dateInputDialog.findViewById(R.id.endDateInput);
+        EditText productNameInput = dateInputDialog.findViewById(R.id.productNameInput);
+        productNameInput.setText(selectedItem);
+
         Button submitButton = dateInputDialog.findViewById(R.id.submitButton);
 
         TextView selectedItemTextView = dateInputDialog.findViewById(R.id.selectedItemTextView);
         selectedItemTextView.setText(selectedItem);
-
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String startDateString = startDateInput.getText().toString();
                 String endDateString = endDateInput.getText().toString();
+                String productNameString = productNameInput.getText().toString();
+
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 try {
@@ -176,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                     Date endDate = dateFormat.parse(endDateString);
 
                     ExpirationDate expirationDate = new ExpirationDate(startDate, endDate);
-                    Product newProduct = new Product(selectedItem, expirationDate);
+                    Product newProduct = new Product(productNameString, expirationDate);
                     mainList.add(newProduct);
                     mainListAdapter.notifyDataSetChanged();
                     dateInputDialog.dismiss();
