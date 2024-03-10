@@ -1,2 +1,2 @@
 Instructions:
-Open AndroidStudio and run app.
+Open AndroidStudio and run app on the emulator.
